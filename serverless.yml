@@ -3,6 +3,8 @@ app: poc
 service: cognito-api-gateway
 frameworkVersion: '3'
 
+configValidationMode: error
+
 provider:
   name: aws
   runtime: nodejs14.x
@@ -22,4 +24,5 @@ functions:
           path: /
           method: post
 
-resources: ${file(resources/resources.yml)}
+# resources: ${file(resources/resources.yml)}
+resources: ${file(resources/cognito.yml)}

@@ -16,9 +16,79 @@ Resources:
       Properties:
         ClientName: rules-engine-user-pool-ui
         GenerateSecret: false
-        UserPoolId: { Ref: UserPool }
-        AccessTokenValidity: 5
-        IdTokenValidity: 5
-        ExplicitAuthFlows:
-          - "ALLOW_USER_PASSWORD_AUTH"
-          - "ALLOW_REFRESH_TOKEN_AUTH"
+        UserPoolId: !Ref UserPool
+        # AccessTokenValidity: 5
+        # IdTokenValidity: 5
+        # ExplicitAuthFlows:
+        #   - "ALLOW_USER_PASSWORD_AUTH"
+        #   - "ALLOW_REFRESH_TOKEN_AUTH"
+
+  # The federated identity for our user pool to auth with
+    CognitoIdentityPool:
+      Type: AWS::Cognito::IdentityPool
+      Properties:
+        IdentityPoolName: rules-engine-auth-identity-pool
+        AllowUnauthenticatedIdentities: false # Don't allow unathenticated users
+        CognitoIdentityProviders:  # Link to our User Pool
+          - ClientId: !Ref UserClient
+          - ProviderName: !GetAtt UserPool.ProviderName
+          # - ProviderName: !Join ['', ['cognito-idp.ap-south-1.amazonaws.com/', 'ap-south-1_kwH2OhlBI']]
+
+    # IAM roles
+    CognitoIdentityPoolRoles:
+      Type: AWS::Cognito::IdentityPoolRoleAttachment
+      Properties:
+        IdentityPoolId: !Ref CognitoIdentityPool
+        Roles:
+          authenticated:
+            Fn::GetAtt: [CognitoAuthRole, Arn]
+
+    # IAM role used for authenticated users
+    CognitoAuthRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: 'Allow'
+              Principal:
+                Federated: 'cognito-identity.amazonaws.com'
+              Action:
+                - 'sts:AssumeRoleWithWebIdentity'
+              Condition:
+                StringEquals:
+                  'cognito-identity.amazonaws.com:aud':
+                    Ref: CognitoIdentityPool
+                'ForAnyValue:StringLike':
+                  'cognito-identity.amazonaws.com:amr': authenticated
+        Policies:
+          - PolicyName: 'CognitoAuthorizedPolicy'
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: 'Allow'
+                  Action:
+                    - 'mobileanalytics:PutEvents'
+                    - 'cognito-sync:*'
+                    - 'cognito-identity:*'
+                  Resource: '*'
+
+                # Allow users to invoke our API
+                - Effect: 'Allow'
+                  Action:
+                    - 'execute-api:Invoke'
+                  Resource:
+                    - https://3whzwn64bj.execute-api.ap-south-1.amazonaws.com
+
+                # Allow users to invoke our API
+                # - Effect: 'Allow'
+                #   Action:
+                #     - 'execute-api:Invoke'
+                #   Resource:
+                #     - https://3whzwn64bj.execute-api.ap-south-1.amazonaws.com
+  # Print out the Id of the Identity Pool that is created
+    # Outputs:
+    #   IdentityPoolId:
+    #     Value:
+    #       Ref: CognitoIdentityPool
