@@ -1,0 +1,25 @@
+org: jitunayak
+app: poc
+service: cognito-api-gateway
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-south-1
+
+functions:
+  open:
+    handler: src/handler.open
+    events:
+      - httpApi:
+          path: /
+          method: get
+  secure:
+    handler: src/secure_handler.secure
+    events:
+      - httpApi:
+          path: /
+          method: post
+
+resources: ${file(resources/resources.yml)}
