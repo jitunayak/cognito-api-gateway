@@ -23,6 +23,8 @@ functions:
       - httpApi:
           path: /
           method: post
+          authorizer:
+             type: aws_iam
 
 # resources: ${file(resources/resources.yml)}
 resources: ${file(resources/cognito.yml)}

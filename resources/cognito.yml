@@ -93,6 +93,16 @@ Resources:
                   Action:
                     - "lambda:InvokeFunction"
                   Resource: "*"
+          - PolicyName: "ApiInvokePoicy"
+            PolicyDocument:
+                Version: "2012-10-17"
+                Statement:
+                  - Effect: 'Allow'
+                    Action:
+                      - 'execute-api:Invoke'
+                    Resource:
+                      - "arn:aws:execute-api:ap-south-1:*:375nxd9sh3/*"
+                      # - https://375nxd9sh3.execute-api.ap-south-1.amazonaws.com/*
 
     # Assigns the roles to the Identity Pool
     IdentityPoolRoleMapping:
