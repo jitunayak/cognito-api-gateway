@@ -5,10 +5,16 @@ frameworkVersion: '3'
 
 configValidationMode: error
 
+custom:
+  serverless-offline:
+    resourceRoutes: true
+    noAuth: true
 provider:
   name: aws
   runtime: nodejs14.x
   region: ap-south-1
+  versionFunctions: false
+  architecture: arm64
 
 functions:
   open:
@@ -24,8 +30,8 @@ functions:
       - httpApi:
           path: /secure
           method: post
-          # authorizer:
-          #    type: aws_iam
+          authorizer:
+             type: aws_iam
 
 plugins:
   - serverless-plugin-typescript
