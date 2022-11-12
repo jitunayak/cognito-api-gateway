@@ -6,9 +6,12 @@ frameworkVersion: '3'
 configValidationMode: error
 
 custom:
+  output:
+    file: stack.json
   serverless-offline:
     resourceRoutes: true
     noAuth: true
+
 provider:
   name: aws
   runtime: nodejs14.x
@@ -36,5 +39,6 @@ functions:
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
+  - serverless-stack-output
 # resources: ${file(resources/resources.yml)}
 resources: ${file(resources/cognito.yml)}

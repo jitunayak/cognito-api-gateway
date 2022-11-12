@@ -7,11 +7,12 @@ import {
   CognitoUserPool,
 } from "amazon-cognito-identity-js";
 
-const identityPoolId = "ap-south-1:568f3dba-766a-4d0c-ad49-9e1e1e4ad044"; //from identity
-const identityProvider =
-  "cognito-idp.ap-south-1.amazonaws.com/ap-south-1_gVrL51R2k"; // from poolid
-const userPoolId = "ap-south-1_gVrL51R2k";
-const clientId = "1gol90ibbic53huc40nd3p6m6q";
+import { IdentityPoolId, UserPoolClientId, UserPoolId } from "../stack.json";
+
+const identityPoolId = IdentityPoolId; // IdentityPoolId
+const identityProvider = `cognito-idp.ap-south-1.amazonaws.com/${UserPoolId}`;
+const userPoolId = UserPoolId; // UserPoolId
+const clientId = UserPoolClientId; // UserPoolClientId
 const region = "ap-south-1";
 
 const buildErrorPayload = (error) => {

@@ -6,3 +6,7 @@ jspm_packages
 .serverless
 
 .build
+
+.vscode
+
+stack.json
