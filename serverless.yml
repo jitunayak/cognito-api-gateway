@@ -15,16 +15,20 @@ functions:
     handler: src/handler.open
     events:
       - httpApi:
-          path: /
-          method: get
+          path: /login
+          method: post
+
   secure:
     handler: src/secure_handler.secure
     events:
       - httpApi:
-          path: /
+          path: /secure
           method: post
-          authorizer:
-             type: aws_iam
+          # authorizer:
+          #    type: aws_iam
 
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
 # resources: ${file(resources/resources.yml)}
 resources: ${file(resources/cognito.yml)}
