@@ -29,7 +29,7 @@ const buildErrorPayload = (error) => {
 
 const buildSuccessPayload = (result) => {
   return {
-    statusCode: 500,
+    statusCode: 200,
     body: JSON.stringify(
       {
         credentials: result,
