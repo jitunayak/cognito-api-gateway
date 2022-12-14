@@ -1,6 +1,6 @@
 ## Generate AWS_IAM credentials from Cognito credentials
 
- >setup 🦄
+ `setup 🦄`
 
 ### yarn
 

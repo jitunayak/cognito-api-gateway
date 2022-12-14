@@ -76,12 +76,20 @@ Resources:
                       # - https://375nxd9sh3.execute-api.ap-south-1.amazonaws.com/*
 
     # Assigns the roles to the Identity Pool
-    IdentityPoolRoleMapping:
-      Type: "AWS::Cognito::IdentityPoolRoleAttachment"
+    # IdentityPoolRoleMapping:
+    #   Type: "AWS::Cognito::IdentityPoolRoleAttachment"
+    #   Properties:
+    #     IdentityPoolId: !Ref IdentityPool
+    #     Roles:
+    #       authenticated: !GetAtt CognitoAuthorizedRole.Arn
+
+    AdminUserPoolGroup:
+      Type: 'AWS::Cognito::UserPoolGroup'
       Properties:
-        IdentityPoolId: !Ref IdentityPool
-        Roles:
-          authenticated: !GetAtt CognitoAuthorizedRole.Arn
+        GroupName: "admins"
+        Precedence: 1
+        UserPoolId: !Ref CognitoUserPool
+        RoleArn: !GetAtt CognitoAuthorizedRole.Arn # Get the ARN of the role defined below
 
 Outputs:
   UserPoolId:

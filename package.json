@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "nodemon -e ts --exec \"sls offline start\"",
-    "dev": "sls deploy"
+    "deploy": "sls deploy",
+    "destroy": "sls remove"
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
